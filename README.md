@@ -159,7 +159,11 @@ http://127.0.0.1:5000/getall
 
 ## Despliegue 📦
 
-_Por definir_
+El despliegue de la aplicación funciona a través de [Heroku](heroku.com). La aplicación
+está escuchando peticiones constantemente a la dirección https://ci4713-sep-dic-2021-flask.herokuapp.com/
+
+La aplicación será desplegada automáticamente con los últimos cambios cada vez que se suban cambios a la
+rama **main** del repositorio.
 
 ## Construido con 🛠️
 
