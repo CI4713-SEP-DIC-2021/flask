@@ -1,18 +1,14 @@
 import os
 from settings.environment import DB_URI, BASE_DIR
+
 basedir = BASE_DIR
 
-class Config(object):
-    DEBUG = False
-    TESTING = False
-from settings.environment import DB_URI, BASE_DIR
-basedir = BASE_DIR
 
 class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SECRET_KEY = "this-really-needs-to-be-changed"
     SQLALCHEMY_DATABASE_URI = DB_URI
 
 

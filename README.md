@@ -14,22 +14,6 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 _**Python3**_
 ```
 sudo apt update
-sudo apt install software-# Backlog Scrum API
-
-_API Rest para dar servicio a Backlog Scrum en el marco de la materia CI4712_
-
-## Comenzando 🚀
-
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
-
-Mira **Deployment** para conocer como desplegar el proyecto.
-
-
-### Pre-requisitos 📋
-
-_**Python3**_
-```
-sudo apt update
 sudo apt install software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
@@ -154,6 +138,14 @@ http://127.0.0.1:5000/get/1
 _para obtener todos los libros agregados._
 ```
 http://127.0.0.1:5000/getall
+```
+
+
+## Ejemplos de servicios de user
+
+_para registrar a un usuario a base de datos._
+```
+http://127.0.0.1:5000/user/register?username=Jhon_Does89&first_name=Jhon&last_name=Does&role=Scrum Team&password=1234
 ```
 
 

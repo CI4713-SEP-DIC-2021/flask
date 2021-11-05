@@ -1,2 +1,7 @@
 __pycache__
 *.pyc
+database/*
+!database/__init__.py
+migrations/*
+migrations/versions/*
+.venv
