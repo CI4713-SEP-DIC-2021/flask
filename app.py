@@ -3,10 +3,12 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from settings.environment import APP_SETTINGS
 from flask import g
+from flask_cors import CORS
 
 
 # Inicializacion de Flask y SQLite
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(APP_SETTINGS)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
