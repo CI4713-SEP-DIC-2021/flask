@@ -176,6 +176,33 @@ def edit():
 
     return jsonify({"msg": username + " role changed to " + new_role}), 200
 
+# Delete users
+@app.route("/user/delete", methods=["POST"])
+@jwt_required
+def delete():
+    current_user = (
+        UserA.query.filter_by(username=get_jwt_identity()).first().serialize()
+    )
+    if not current_user["role"] == "Product Owner":
+        return (
+            jsonify({"msg": current_user["username"] + " does not have privileges"}),
+            400,
+        )
+        
+    
+    username = request.json.get("username", None)
+    if not username:
+        return jsonify({"msg": "Missing username parameter"}), 400
+
+    deletedUser = UserA.query.filter_by(username=username).delete()
+
+    if (deletedUser) :
+        db.session.commit()
+        return jsonify({"msg": "User deleted successfully" }), 200
+        
+    return jsonify({"msg": "User not found" }), 404
+
+    
 
 # Provide Header with access token
 # -H "Authorization" : "Bearer <access_token provided in the login response>"
