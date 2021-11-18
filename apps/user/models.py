@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 assign = db.Table(
     "assign",
     db.Column("user_id", db.Integer, db.ForeignKey("userA.id")),
+    db.Column("task_id", db.Integer, db.ForeignKey("tasks.id")),
+
 )
 
 
@@ -21,7 +23,13 @@ class UserA(db.Model):
     role = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     projects = db.relationship("Project", backref="userA")
-    teams = db.relationship("Team", secondary="users")
+    logger = db.relationship("Logger", backref="userA")
+    sprint = db.relationship("Sprint", backref="userA")
+    task_created = db.relationship("Task", backref="userA")
+    tasks = relationship(
+        "Task", secondary=assign, backref=db.backref("asignners", lazy="dynamic")
+    )
+    #teams = db.relationship("Team", secondary="users")
 
     def __init__(self, username, first_name, last_name, role, password):
         self.username = username

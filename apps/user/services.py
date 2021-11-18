@@ -1,6 +1,8 @@
 import os
 from app import db, app
 from .models import UserA
+from apps.logger.models import Logger, LoggerEvents
+from apps.logger.services import add_event_logger
 from flask import request, jsonify, json
 from flask_jwt_extended import (
     JWTManager,
@@ -48,6 +50,10 @@ def register():
             db.session.add(user)
             db.session.commit()
 
+            ############Agregando evento al logger#########################
+            add_event_logger(user.id, LoggerEvents.user_register, MODULE)
+            ###############################################################
+
             return jsonify(user.serialize()), 200
         except Exception as e:
             print(e)
@@ -90,6 +96,10 @@ def register():
             )
             db.session.add(user)
             db.session.commit()
+
+            ############Agregando evento al logger#########################
+            add_event_logger(user.id, LoggerEvents.user_register, MODULE)
+            ###############################################################
 
             return jsonify(user.serialize()), 200
         except Exception as e:
@@ -134,6 +144,10 @@ def login():
         "userId": user.id,
     }
 
+    ############Agregando evento al logger####################
+    add_event_logger(user.id, LoggerEvents.user_login, MODULE)
+    ##########################################################
+
     return jsonify(tokens), 200
 
 
@@ -173,6 +187,9 @@ def edit():
     target.role = new_role
     db.session.commit()
 
+    #############Agregando evento al logger###########################
+    add_event_logger(user.id, LoggerEvents.user_role_assign, MODULE)
+    ##################################################################
 
     return jsonify({"msg": username + " role changed to " + new_role}), 200
 
@@ -200,6 +217,10 @@ def delete():
         db.session.commit()
         return jsonify({"msg": "User deleted successfully" }), 200
         
+    #############Agregando evento al logger###########################
+    add_event_logger(user.id, LoggerEvents.user_delete, MODULE)
+    ##################################################################
+
     return jsonify({"msg": "User not found" }), 404
 
     
