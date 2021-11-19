@@ -27,7 +27,7 @@ def get_all_logs():
         return str(e)
 
 
-@app.route("/logger/delete/<id_>")
+@app.route("/logger/delete/<id_>", methods=["DELETE"])
 def delete_log(id_):
     try:
         log = Logger.query.filter_by(id=id_).delete()
@@ -35,7 +35,6 @@ def delete_log(id_):
         return jsonify(log), 200
     except Exception as e:
         return str(e)
-
 
 def add_event_logger(user, event, module):
     """

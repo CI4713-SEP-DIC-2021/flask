@@ -27,10 +27,11 @@ def get_all_by_project(project_id):
 @app.route("/stories/add", methods=["POST"])
 def add_story():
     if request.method == "POST":
-        description = request.form.get("description")
-        project_id = request.form.get("project_id")
-        priority = request.form.get("priority")
-        epic_string = request.form.get("epic")
+        request_data = request.get_json()
+        description = request_data["description"]
+        project_id = request_data["project_id"]
+        priority = request_data["priority"]
+        epic_string = request_data["epic"]
         if epic_string == "true":
             epic = True
         else:
@@ -101,16 +102,17 @@ def search_story(id_):
 def update_story(id_):
     if request.method == "PUT":
         story = Story.query.get_or_404(id_)
-        description = request.form.get("description")
-        project_id = request.form.get("project_id")
-        priority = request.form.get("priority")
-        epic_string = request.form.get("epic")
+        request_data = request.get_json()
+        description = request_data["description"]
+        project_id = request_data["project_id"]
+        priority = request_data["priority"]
+        epic_string = request_data["epic"]
         if epic_string == "true":
             epic = True
         else:
             epic = False
 
-        done_string = request.form.get("done")
+        done_string = request_data["done"]
         if done_string == "true":
             done = True
         else:

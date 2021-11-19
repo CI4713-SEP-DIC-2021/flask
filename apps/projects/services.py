@@ -3,6 +3,9 @@ from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
 
+from apps.logger.models import Logger, LoggerEvents
+from apps.logger.services import add_event_logger
+
 
 MODULE = "Proyecto"
 
@@ -25,14 +28,17 @@ def get_all_by_user(user_id):
 @app.route("/projects/add", methods=["POST"])
 def add_project():
     if request.method == "POST":
-        description = request.form.get("description")
-        user_id = request.form.get("user_id")
+        request_data = request.get_json()
+        description = request_data['description']
+        user_id = request_data['user_id']
         try:
             project = Project(
                 description=description, user_id=user_id, status=ProjectStatus.active
             )
             db.session.add(project)
             db.session.commit()
+
+            add_event_logger(user_id, LoggerEvents.add_project, MODULE)
 
             return jsonify(project.serialize())
         except:
@@ -52,6 +58,7 @@ def pause_project(id_):
 
             user_id = project.user_id
 
+            add_event_logger(user_id, LoggerEvents.pause_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -69,6 +76,7 @@ def reactivate_project(id_):
             db.session.commit()
 
             user_id = project.user_id
+            add_event_logger(user_id, LoggerEvents.reactive_project, MODULE)
 
             return jsonify(project.serialize())
         except:
@@ -87,6 +95,7 @@ def delete_project(id_):
             db.session.delete(project)
             db.session.commit()
 
+            add_event_logger(user_id, LoggerEvents.delete_project, MODULE)
             return jsonify({"server": "200"})
         except:
             return jsonify({"server": "ERROR"})
@@ -99,15 +108,16 @@ def delete_project(id_):
 def update_project(id_):
     if request.method == "PUT":
         project = Project.query.get_or_404(id_)
-        description = request.form.get("description")
-        user_id = request.form.get("user_id")
+        request_data = request.get_json()
+        description = request_data['description']
+        user_id = request_data['user_id']
 
         project.description = description
         project.user_id = user_id
         try:
             db.session.commit()
 
-
+            add_event_logger(user_id, LoggerEvents.update_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -122,6 +132,7 @@ def search_project(id_):
         project = Project.query.get_or_404(id_)
 
         user_id = project.user_id
+        add_event_logger(user_id, LoggerEvents.search_project, MODULE)
 
         return jsonify([project.serialize()])
     except:

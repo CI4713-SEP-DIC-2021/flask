@@ -16,6 +16,7 @@ class LoggerEvents(enum.Enum):
     update_test = "Modificar Prueba de Aceptacion"
     activate_project = "Activar Proyecto"
     pause_project = "Pausar Proyecto"
+    reactive_project = "Reactivar Proyectp"
     delete_project = "Eliminar Proyecto"
     search_project = "Buscar Proyecto"
     user_register = "Registro"
