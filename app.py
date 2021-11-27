@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from settings.environment import APP_SETTINGS
 from flask import g
