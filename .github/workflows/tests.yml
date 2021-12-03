@@ -1,0 +1,8 @@
+name: Unit tests
+on: [push]
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -v
