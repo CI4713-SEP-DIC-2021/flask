@@ -4,5 +4,6 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
+      - run: ls
       - run: pip install -r requirements.txt
       - run: python -m pytest -v
