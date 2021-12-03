@@ -2,6 +2,8 @@ import os
 from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
+from apps.logger.models import LoggerEvents
+from apps.logger.services import add_event_logger
 
 
 MODULE = "Proyecto"
@@ -33,7 +35,7 @@ def add_project():
             )
             db.session.add(project)
             db.session.commit()
-
+            add_event_logger(user_id, LoggerEvents.add_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -51,7 +53,7 @@ def pause_project(id_):
             db.session.commit()
 
             user_id = project.user_id
-
+            add_event_logger(user_id, LoggerEvents.pause_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -69,7 +71,7 @@ def reactivate_project(id_):
             db.session.commit()
 
             user_id = project.user_id
-
+            add_event_logger(user_id, LoggerEvents.reactivate_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -86,7 +88,7 @@ def delete_project(id_):
             user_id = project.user_id
             db.session.delete(project)
             db.session.commit()
-
+            add_event_logger(user_id, LoggerEvents.delete_project, MODULE)
             return jsonify({"server": "200"})
         except:
             return jsonify({"server": "ERROR"})
@@ -107,7 +109,7 @@ def update_project(id_):
         try:
             db.session.commit()
 
-
+            add_event_logger(user_id, LoggerEvents.update_project, MODULE)
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -122,7 +124,7 @@ def search_project(id_):
         project = Project.query.get_or_404(id_)
 
         user_id = project.user_id
-
+        add_event_logger(user_id, LoggerEvents.search_project, MODULE)
         return jsonify([project.serialize()])
     except:
         return jsonify({"server": "ERROR"})
