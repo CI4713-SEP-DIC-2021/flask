@@ -31,8 +31,9 @@ def get_planning_by_sprint(sprint_id):
 @app.route("/meetings/planning/add", methods=["POST"])
 def add_planning():
     if request.method == "POST":
-        sprint_id = request.form.get("sprint_id")
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
+        request_data = request.get_json()
+        sprint_id = request_data["sprint_id"]
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
 
         try:
             planning = Planning(sprint_id=sprint_id, date=date)
@@ -56,8 +57,9 @@ def add_planning():
 def update_planning(_id):
     if request.method == "PUT":
         planning = Planning.query.get_or_404(_id)
-        sprint_id = request.form.get("sprint_id")
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
+        request_data = request.get_json()
+        sprint_id = request_data["sprint_id"]
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
 
         planning.sprint_id = sprint_id
         planning.date = date
@@ -78,10 +80,11 @@ def update_planning(_id):
 def add_planningResult(planning_id):
     if request.method == "POST":
         planning_id = planning_id
-        subject = request.form.get("subject")
-        activity = request.form.get("activity")
-        user_story_id = request.form.get("user_story_id")
-        assigned = request.form.get("assigned")
+        request_data = request.get_json()
+        subject = request_data["subject"]
+        activity = request_data["activity"]
+        user_story_id = request_data["user_story_id"]
+        assigned = request_data["assigned"]
 
         try:
             planningResult = PlanningResult(
@@ -113,11 +116,12 @@ def add_planningResult(planning_id):
 def update_planningResult(id_):
     if request.method == "PUT":
         result = PlanningResult.query.get_or_404(id_)
-        planning_id = request.form.get("planning_id")
-        subject = request.form.get("subject")
-        activity = request.form.get("activity")
-        user_story_id = request.form.get("user_story_id")
-        assigned = request.form.get("assigned")
+        request_data = request.get_json()
+        planning_id = request_data["planning_id"]
+        subject = request_data["subject"]
+        activity = request_data["activity"]
+        user_story_id = request_data["user_story_id"]
+        assigned = request_data["assigned"]
 
         result.planning_id = planning_id
         result.subject = subject
@@ -173,12 +177,13 @@ def get_retrospectives_by_sprint(sprint_id):
 @app.route("/meetings/retrospectives/add", methods=["POST"])
 def add_retrospective():
     if request.method == "POST":
-        sprint_id = request.form.get("sprint_id")
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
-        method = request.form.get("method")
-        positive = request.form.get("positive")
-        negative = request.form.get("negative")
-        decision = request.form.get("decision")
+        request_data = request.get_json()
+        sprint_id = request_data["sprint_id"]
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
+        method = request_data["method"]
+        positive = request_data["positive"]
+        negative = request_data["negative"]
+        decision = request_data["decision"]
 
         try:
             retrospective = Retrospective(
@@ -212,12 +217,13 @@ def add_retrospective():
 def update_retrospective(_id):
     if request.method == "PUT":
         retrospective = Retrospective.query.get_or_404(_id)
-        sprint_id = request.form.get("sprint_id")
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
-        method = request.form.get("method")
-        positive = request.form.get("positive")
-        negative = request.form.get("negative")
-        decision = request.form.get("decision")
+        request_data = request.get_json()
+        sprint_id = request_data["sprint_id"]
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
+        method = request_data["method"]
+        positive = request_data["positive"]
+        negative = request_data["negative"]
+        decision = request_data["decision"]
 
         retrospective.sprint_id = sprint_id
         retrospective.date = date
@@ -274,9 +280,10 @@ def get_dailies_by_sprint(sprint_id):
 @app.route("/meetings/dailies/add", methods=["POST"])
 def add_daily():
     if request.method == "POST":
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
-        report = request.form.get("report")
-        sprint_id = request.form.get("sprint_id")
+        request_data = request.get_json()
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
+        report = request_data["report"]
+        sprint_id = request_data["sprint_id"]
 
         try:
             daily = Daily(date=date, report=report, sprint_id=sprint_id,)
@@ -311,9 +318,10 @@ def search_daily(id_):
 def update_daily(id_):
     if request.method == "PUT":
         daily = Daily.query.get_or_404(id_)
-        date = datetime.strptime(request.form.get("date"), "%a, %d %b %Y %H:%M:%S %Z")
-        report = request.form.get("report")
-        sprint_id = request.form.get("sprint_id")
+        request_data = request.get_json()
+        date = datetime.strptime(request_data["date"], "%d/%m/%Y")
+        report = request_data["report"]
+        sprint_id = request_data["sprint_id"]
 
         daily.date = date
         daily.report = report
