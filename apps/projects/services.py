@@ -22,7 +22,7 @@ def get_all_by_user(user_id):
     if projects.count() > 0:
         return   jsonify([project.serialize() for project in projects])
     else:
-        return  jsonify({"server": "NO_CONTENT"})
+        return  jsonify([])
 
 
 """ Agregar un proyecto """
@@ -31,9 +31,8 @@ def get_all_by_user(user_id):
 @app.route("/projects/add", methods=["POST"])
 def add_project():
     if request.method == "POST":
-        description = request.form.get("description")
-        user_id = request.form.get("user_id")
-        print(request.form)
+        description = request.json.get("description", None)
+        user_id = request.json.get("user_id", None)
         try:
             project = Project(
                 description=description, user_id=user_id, status=ProjectStatus.active
