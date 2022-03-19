@@ -25,6 +25,7 @@ from apps.docs.services import *
 ########################################
 # Para caso de desear agregar interface.
 @app.route("/")
+@cross_origin()
 def hello():
     return "Hello World!"
 

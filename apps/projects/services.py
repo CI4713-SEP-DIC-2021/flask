@@ -1,4 +1,6 @@
 import os
+
+from flask_cors import cross_origin
 from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
@@ -13,12 +15,14 @@ MODULE = "Proyecto"
 
 
 @app.route("/projects/getall/<int:user_id>")
+@cross_origin()
 def get_all_by_user(user_id):
     projects = Project.query.filter_by(user_id=user_id)
+    
     if projects.count() > 0:
-        return jsonify([project.serialize() for project in projects])
+        return   jsonify([project.serialize() for project in projects])
     else:
-        return jsonify({"server": "NO_CONTENT"})
+        return  jsonify({"server": "NO_CONTENT"})
 
 
 """ Agregar un proyecto """
@@ -29,6 +33,7 @@ def add_project():
     if request.method == "POST":
         description = request.form.get("description")
         user_id = request.form.get("user_id")
+        print(request.form)
         try:
             project = Project(
                 description=description, user_id=user_id, status=ProjectStatus.active
