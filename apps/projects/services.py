@@ -1,4 +1,6 @@
 import os
+
+from flask_cors import cross_origin
 from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
@@ -13,12 +15,14 @@ MODULE = "Proyecto"
 
 
 @app.route("/projects/getall/<int:user_id>")
+@cross_origin()
 def get_all_by_user(user_id):
-    projects = Project.query.filter_by(user_id=user_id)
+    projects = Project.query.filter_by(user_id=user_id).order_by(Project.date_created.asc())
+    
     if projects.count() > 0:
-        return jsonify([project.serialize() for project in projects])
+        return   jsonify([project.serialize() for project in projects])
     else:
-        return jsonify({"server": "NO_CONTENT"})
+        return  jsonify([])
 
 
 """ Agregar un proyecto """
@@ -27,17 +31,19 @@ def get_all_by_user(user_id):
 @app.route("/projects/add", methods=["POST"])
 def add_project():
     if request.method == "POST":
-        description = request.form.get("description")
-        user_id = request.form.get("user_id")
+        description = request.json.get("description", None)
+        user_id = request.json.get("user_id", None)
+        type = request.json.get("type", None)
         try:
             project = Project(
-                description=description, user_id=user_id, status=ProjectStatus.active
+                description=description, user_id=user_id, status=ProjectStatus.active, type=type
             )
             db.session.add(project)
             db.session.commit()
             add_event_logger(user_id, LoggerEvents.add_project, MODULE)
             return jsonify(project.serialize())
-        except:
+        except Exception as e:
+            print(e) 
             return jsonify({"server": "ERROR"})
 
 
@@ -101,11 +107,13 @@ def delete_project(id_):
 def update_project(id_):
     if request.method == "PUT":
         project = Project.query.get_or_404(id_)
-        description = request.form.get("description")
-        user_id = request.form.get("user_id")
+        description = request.json.get("description", None)
+        user_id = request.json.get("user_id", None)
+        type = request.json.get("type", None)
 
         project.description = description
         project.user_id = user_id
+        project.type = type
         try:
             db.session.commit()
 

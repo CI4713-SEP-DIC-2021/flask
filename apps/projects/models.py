@@ -19,11 +19,13 @@ class Project(db.Model):
     status = db.Column(
         db.Enum(ProjectStatus), default=ProjectStatus.active, nullable=False
     )
+    type = db.Column(db.Text)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, user_id, description, status):
+    def __init__(self, user_id, description,type, status):
         self.description = description
         self.user_id = user_id
+        self.type = type
         self.status = ProjectStatus.active
 
     def __repr__(self):
@@ -35,5 +37,6 @@ class Project(db.Model):
             "description": self.description,
             "user_id": self.user_id,
             "status": self.status.value,
+            "type": self.type,
             "date_created": self.date_created,
         }
