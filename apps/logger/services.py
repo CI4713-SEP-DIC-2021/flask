@@ -27,7 +27,7 @@ def get_all_logs():
         return str(e)
 
 
-@app.route("/logger/delete/<id_>")
+@app.route("/logger/delete/<id_>", methods=["DELETE"])
 def delete_log(id_):
     try:
         log = Logger.query.filter_by(id=id_).delete()

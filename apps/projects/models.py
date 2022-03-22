@@ -21,7 +21,6 @@ class Project(db.Model):
     )
     type = db.Column(db.Text)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
     def __init__(self, user_id, description,type, status):
         self.description = description
         self.user_id = user_id

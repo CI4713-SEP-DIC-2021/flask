@@ -79,8 +79,7 @@ def register():
         if UserA.query.filter_by(username=parameters["username"]).first():
             return (
                 jsonify(
-                    {"msg": "Username '" +
-                        parameters["username"] + "' already exist"}
+                    {"msg": "Username '" + parameters["username"] + "' already exist"}
                 ),
                 400,
             )
@@ -143,7 +142,7 @@ def login():
         "access_token": create_access_token(identity=username, expires_delta=expires),
         "refresh_token": create_refresh_token(identity=username),
         "userId": user.id,
-        **user.serialize()
+        **user.serialize(),
     }
 
     ############Agregando evento al logger####################
@@ -172,8 +171,7 @@ def edit():
     )
     if not current_user["role"] == "Product Owner":
         return (
-            jsonify({"msg": current_user.usarname +
-                    " does not have privileges"}),
+            jsonify({"msg": current_user.usarname + " does not have privileges"}),
             400,
         )
 
@@ -191,14 +189,12 @@ def edit():
     db.session.commit()
 
     #############Agregando evento al logger###########################
-    add_event_logger(user.id, LoggerEvents.user_role_assign, MODULE)
+    add_event_logger(current_user["id"], LoggerEvents.user_role_assign, MODULE)
     ##################################################################
 
     return jsonify({"msg": username + " role changed to " + new_role}), 200
 
 # Delete users
-
-
 @app.route("/user/delete", methods=["POST"])
 @jwt_required
 def delete():
@@ -207,27 +203,28 @@ def delete():
     )
     if not current_user["role"] == "Product Owner":
         return (
-            jsonify(
-                {"msg": current_user["username"] + " does not have privileges"}),
+            jsonify({"msg": current_user["username"] + " does not have privileges"}),
             400,
         )
-
+        
+    
     username = request.json.get("username", None)
     if not username:
         return jsonify({"msg": "Missing username parameter"}), 400
 
     deletedUser = UserA.query.filter_by(username=username).delete()
 
-    if (deletedUser):
+    if (deletedUser) :
         db.session.commit()
-        return jsonify({"msg": "User deleted successfully"}), 200
-
+        return jsonify({"msg": "User deleted successfully" }), 200
+        
     #############Agregando evento al logger###########################
-    add_event_logger(user.id, LoggerEvents.user_delete, MODULE)
+    add_event_logger(current_user["id"], LoggerEvents.user_delete, MODULE)
     ##################################################################
 
-    return jsonify({"msg": "User not found"}), 404
+    return jsonify({"msg": "User not found" }), 404
 
+    
 
 # Provide Header with access token
 # -H "Authorization" : "Bearer <access_token provided in the login response>"
@@ -238,8 +235,7 @@ def profiles():
 
     try:
         current_user = (
-            UserA.query.filter_by(
-                username=get_jwt_identity()).first().serialize()
+            UserA.query.filter_by(username=get_jwt_identity()).first().serialize()
         )
         users = UserA.query.all()
         users = [user.serialize() for user in users]
@@ -247,3 +243,36 @@ def profiles():
         return jsonify(temp), 200
     except Exception as e:
         return str(e)
+
+# Provide Header with access token and json body with username and new_password parameters
+# -H "Authorization" : "Bearer <access_token provided in the login response>"
+@app.route("/user/editPassword", methods=["POST"])
+@jwt_required
+def editPassword():
+    current_user = (
+        UserA.query.filter_by(username=get_jwt_identity()).first().serialize()
+    )
+    if not current_user["role"] == "Product Owner":
+        return (
+            jsonify({"msg": current_user.usarname + " does not have privileges"}),
+            400,
+        )
+
+    username = request.json.get("username", None)
+    if not username:
+        return jsonify({"msg": "Missing username parameter"}), 400
+
+    new_password = request.json.get("new_password", None)
+    if (not new_password):
+        return jsonify({"msg": "Invalid new_password parameter"}), 400
+
+    target = UserA.query.filter_by(username=username).first()
+    target.password = new_password
+    db.session.commit()
+
+    #############Agregando evento al logger###########################
+    add_event_logger(current_user["id"], LoggerEvents.user_role_assign, MODULE)
+    ##################################################################
+
+    return jsonify({"msg": username + " password changed"}), 200
+

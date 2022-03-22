@@ -1,16 +1,39 @@
 import os
-
-from flask_cors import cross_origin
 from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
-from apps.logger.models import LoggerEvents
+from flask_cors import cross_origin
+from apps.logger.models import Logger, LoggerEvents
 from apps.logger.services import add_event_logger
 
 
 MODULE = "Proyecto"
 
+""" Listar todos los proyectos """
 
+
+@app.route("/projects/all")
+def all():
+    try:
+        projects = Project.query.all()
+        return jsonify([user.serialize() for user in projects])
+    except Exception as e:
+        return str(e)
+
+##################################################################
+# New: Get all projects
+
+""" Listar todos los proyectos de un usuario """
+
+@app.route("/projects/getall")
+def getall_projects():
+    try:
+        projects = Project.query.all()
+        return jsonify([project.serialize() for project in projects])
+    except Exception as e:
+        return str(e)
+
+##################################################################
 """ Listar todos los proyectos de un usuario """
 
 
@@ -18,11 +41,10 @@ MODULE = "Proyecto"
 @cross_origin()
 def get_all_by_user(user_id):
     projects = Project.query.filter_by(user_id=user_id).order_by(Project.date_created.asc())
-    
     if projects.count() > 0:
-        return   jsonify([project.serialize() for project in projects])
+        return jsonify([project.serialize() for project in projects])
     else:
-        return  jsonify([])
+        return jsonify([])
 
 
 """ Agregar un proyecto """
@@ -31,6 +53,18 @@ def get_all_by_user(user_id):
 @app.route("/projects/add", methods=["POST"])
 def add_project():
     if request.method == "POST":
+        """request_data = request.get_json()
+        description = request_data['description']
+        user_id = request_data['user_id']
+        type = request_data['type']
+        # JSON
+        request_data = request.get_json()
+
+        description = request_data['description']
+        status = request_data['status']
+        user_id = request_data['user_id']
+        type = request_data['type']
+        # JSON"""
         description = request.json.get("description", None)
         user_id = request.json.get("user_id", None)
         type = request.json.get("type", None)
@@ -40,7 +74,9 @@ def add_project():
             )
             db.session.add(project)
             db.session.commit()
+
             add_event_logger(user_id, LoggerEvents.add_project, MODULE)
+
             return jsonify(project.serialize())
         except Exception as e:
             print(e) 
@@ -59,6 +95,7 @@ def pause_project(id_):
             db.session.commit()
 
             user_id = project.user_id
+
             add_event_logger(user_id, LoggerEvents.pause_project, MODULE)
             return jsonify(project.serialize())
         except:
@@ -77,7 +114,8 @@ def reactivate_project(id_):
             db.session.commit()
 
             user_id = project.user_id
-            add_event_logger(user_id, LoggerEvents.reactivate_project, MODULE)
+            add_event_logger(user_id, LoggerEvents.reactive_project, MODULE)
+
             return jsonify(project.serialize())
         except:
             return jsonify({"server": "ERROR"})
@@ -94,6 +132,7 @@ def delete_project(id_):
             user_id = project.user_id
             db.session.delete(project)
             db.session.commit()
+
             add_event_logger(user_id, LoggerEvents.delete_project, MODULE)
             return jsonify({"server": "200"})
         except:
@@ -107,6 +146,18 @@ def delete_project(id_):
 def update_project(id_):
     if request.method == "PUT":
         project = Project.query.get_or_404(id_)
+        """request_data = request.get_json()
+        description = request_data['description']
+        user_id = request_data['user_id']
+        type = request_data['type']
+        # JSON
+        request_data = request.get_json()
+
+        description = request_data['description']
+        status = request_data['status']
+        user_id = request_data['user_id']
+        type = request_data['type']
+        # JSON"""
         description = request.json.get("description", None)
         user_id = request.json.get("user_id", None)
         type = request.json.get("type", None)
@@ -133,6 +184,7 @@ def search_project(id_):
 
         user_id = project.user_id
         add_event_logger(user_id, LoggerEvents.search_project, MODULE)
+
         return jsonify([project.serialize()])
     except:
         return jsonify({"server": "ERROR"})
