@@ -101,7 +101,7 @@ class CopyRight(db.Model):
     __tablename__ = "copyR"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -112,10 +112,10 @@ class CopyRight(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -124,7 +124,7 @@ class Intro(db.Model):
     __tablename__ = "intro"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -135,10 +135,10 @@ class Intro(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -147,7 +147,7 @@ class Purpose(db.Model):
     __tablename__ = "purpose"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -158,10 +158,10 @@ class Purpose(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #"doc = Documentation.query.get_or_404(self.doc_id)"
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -170,7 +170,7 @@ class Motivation(db.Model):
     __tablename__ = "motivation"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -181,10 +181,10 @@ class Motivation(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -193,7 +193,7 @@ class Status(db.Model):
     __tablename__ = "status"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -204,10 +204,10 @@ class Status(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -216,7 +216,7 @@ class Scope(db.Model):
     __tablename__ = "scope"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -227,10 +227,10 @@ class Scope(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+       #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -239,7 +239,7 @@ class Arq(db.Model):
     __tablename__ = "arq"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     path = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, path):
@@ -250,10 +250,10 @@ class Arq(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "path": self.path,
         }
 
@@ -262,7 +262,7 @@ class Diag(db.Model):
     __tablename__ = "diag"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     path = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, path):
@@ -273,10 +273,10 @@ class Diag(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "path": self.path,
         }
 
@@ -285,7 +285,7 @@ class Foundation(db.Model):
     __tablename__ = "foundation"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -296,10 +296,10 @@ class Foundation(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
         }
 
@@ -308,7 +308,7 @@ class Values(db.Model):
     __tablename__ = "values"
 
     id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.id"), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     def __init__(self, doc_id, content):
@@ -319,9 +319,40 @@ class Values(db.Model):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        doc = Documentation.query.get_or_404(self.doc_id)
+        #doc = Documentation.query.get_or_404(self.doc_id)
         return {
             "id": self.id,
-            "doc": {"id": str(doc.id), "name": doc.name},
+            "doc": {"id": str(self.doc_id)},
             "content": self.content,
+        }
+
+class History(db.Model):
+    __tablename__ = "history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, db.ForeignKey("documentation.project_id"), nullable=False)
+    date = db.Column(db.Text, nullable=False)
+    version = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    teams = db.Column(db.Text, nullable=False)
+
+    def __init__(self, doc_id, date, version, description, teams):
+        self.doc_id = doc_id
+        self.date = date
+        self.version = version
+        self.description = description
+        self.teams = teams
+
+    def __repr__(self):
+        return "<id {}>".format(self.id)
+
+    def serialize(self):
+        #doc = Documentation.query.get_or_404(self.doc_id)
+        return {
+            "id": self.id,
+            "doc": {"id": str(self.doc_id)},
+            "date": self.date,
+            "version": self.version,
+            "description": self.description,
+            "teams": self.teams,
         }

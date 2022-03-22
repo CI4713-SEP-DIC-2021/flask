@@ -150,7 +150,8 @@ def add_criteria():
             return jsonify({"server": "ERROR"})
 
 
-@app.route("/criteria/delete/<criteria_id>", methods=["POST"])
+#@app.route("/criteria/delete/<criteria_id>", methods=["POST"])
+@app.route("/criteria/delete/<criteria_id>", methods=["DELETE"])
 def delete_criteria(criteria_id):
     try:
         criteria = AcceptanceCriteria.query.filter_by(id=criteria_id).delete()
@@ -191,7 +192,8 @@ def add_tests():
             return jsonify({"server": "ERROR"})
 
 
-@app.route("/tests/delete/<test_id>", methods=["POST"])
+#@app.route("/tests/delete/<test_id>", methods=["POST"])
+@app.route("/tests/delete/<test_id>", methods=["DELETE"])
 def delete_test(test_id):
     try:
         test = AcceptanceTest.query.filter_by(id=test_id).delete()
@@ -248,7 +250,7 @@ def update_criteria(criteria_id):
             description = request.json.get("description")
             criteria.description = description
 
-        if request.json.get("approved"):
+        #if request.json.get("approved"):
             approved = request.json.get("approved")
             criteria.approved = approved
 
@@ -273,7 +275,7 @@ def update_test(test_id):
             description = request.json.get("description")
             test.description = description
 
-        if request.json.get("approved"):
+        #if request.json.get("approved"):
             approved = request.json.get("approved")
             test.approved = approved
 

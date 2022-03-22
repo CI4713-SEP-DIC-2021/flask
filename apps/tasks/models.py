@@ -33,8 +33,10 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.Text)
+    functions = db.Column(db.Text)
+    story_id = db.Column(db.Text)
     # relacion one task - one story OBLIGATORIO
-    # story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), nullable=False)
+    #story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), nullable=False)
     # relacion one task - one sprint OBLIGATORIO
     sprint_id = db.Column(db.Integer, db.ForeignKey("sprints.id"), nullable=False)
     task_type = db.Column(db.Enum(TaskType), default=TaskType.develop, nullable=False)
@@ -49,6 +51,8 @@ class Task(db.Model):
     def __init__(
         self,
         description,
+        functions,
+        story_id,
         sprint_id,
         task_type,
         task_status,
@@ -57,6 +61,8 @@ class Task(db.Model):
         users=None,
     ):
         self.description = description
+        self.functions = functions
+        self.story_id = story_id
         self.sprint_id = sprint_id
         self.task_type = task_type
         self.task_status = task_status
@@ -83,6 +89,8 @@ class Task(db.Model):
         return {
             "id": self.id,
             "description": self.description,
+            "functions": self.functions,
+            "story_id": self.story_id,
             "sprint_id": self.sprint_id,
             "task_type": self.task_type.value,
             "task_status": self.task_status.value,
