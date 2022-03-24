@@ -48,6 +48,7 @@ class Logger(db.Model):
             "id": self.id,
             "user": UserA.query.get_or_404(self.user).username,
             "event": self.event.value,
-            "date": self.date,
+            "date": self.date.strftime("%d-%m-%Y"),
+            "time": self.date.strftime("%H:%M"),
             "loged_module": self.loged_module,
         }
