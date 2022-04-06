@@ -23,6 +23,7 @@ from apps.tasks.services import *
 from apps.logger.services import *
 from apps.meetings.services import *
 from apps.docs.services import *
+from apps.process.services import *
 
 ########################################
 # Para caso de desear agregar interface.
