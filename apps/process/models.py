@@ -85,7 +85,7 @@ class Process(db.Model):
                 "id": self.id,
                 "name": self.name,
                 "group": ProcessGroup.query.get_or_404(self.group).name,
-                "value": self.qualitative_value
+                "value": self.qualitative_value.value
             }
         else:
             return {
