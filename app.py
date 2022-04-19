@@ -24,6 +24,7 @@ from apps.logger.services import *
 from apps.meetings.services import *
 from apps.docs.services import *
 from apps.process.services import *
+from apps.processes.services import *
 
 ########################################
 # Para caso de desear agregar interface.
