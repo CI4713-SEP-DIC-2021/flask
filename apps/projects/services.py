@@ -1,4 +1,7 @@
 import os
+from itertools import groupby
+
+from apps.processes.models import Group, Process2
 from .models import Project, ProjectStatus
 from app import db, app
 from flask import request, jsonify
@@ -186,5 +189,55 @@ def search_project(id_):
         add_event_logger(user_id, LoggerEvents.search_project, MODULE)
 
         return jsonify([project.serialize()])
+    except:
+        return jsonify({"server": "ERROR"})
+
+@app.route("/projects/processes/<int:id_>")
+def get_project_processes(id_):
+
+    try:
+
+        project = Project.query.get_or_404(id_) 
+        processes = Process2.query.filter_by(project_id=id_).order_by("category")
+
+        processes_by_category = [list(group) for key, group in groupby(processes, lambda p: p.category)]
+
+        project_categories = []
+
+        for category_processes in processes_by_category:
+
+            category_processes.sort(key=lambda p: p.group_id)
+            by_group = [list(group) for key, group in groupby(category_processes, lambda p: p.group_id)]
+
+            category_groups = []
+
+            for process in by_group:
+
+                group_name = Group.query.get_or_404(process[0].group_id).name
+                category_groups.append(
+                    {
+                        "group_name": group_name,
+                        "processes": list(map(lambda p: {"name": p.name, "value": p.value}, process))
+                    }
+                )
+
+            project_categories.append(
+                {
+                    "category_name": category_processes[0].category,
+                    "groups": category_groups
+                }
+            )
+        
+        response = {
+            "project_description": project.description,
+            "categories": project_categories
+        }
+
+        return jsonify(response)
+
+                
+
+
+
     except:
         return jsonify({"server": "ERROR"})
